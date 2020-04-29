@@ -2,7 +2,7 @@ import tkinter
 import sqlite3
 from tkinter import ttk
 
-class ServiceRequestsPage(tkinter.Frame):
+class EquipmentPage(tkinter.Frame):
 
     results_table = None
 
@@ -27,12 +27,12 @@ class ServiceRequestsPage(tkinter.Frame):
 
             - controller : the application
         """
-        # Query: Get all service requests
-        query = 'SELECT MMSR_ID, Departmment, StartDate, EndDate FROM Service_Request'
+        # Query: Get all equipment
+        query = 'SELECT * FROM Equipment'
 
-        self.create_header(controller, 'Current service requests')
+        self.create_header(controller, 'All equipment (computers, parts, A/V)')
         self.run_query(query)
-        self.create_buttons(controller, query)
+        self.create_buttons(controller)
 
     ############################### PAGE PROPERTIES ############################### 
 
@@ -46,28 +46,27 @@ class ServiceRequestsPage(tkinter.Frame):
         label = tkinter.Label(self, text=header, font=controller.header_font)
         label.pack(side='top', fill='x', pady=20)
 
-    def create_buttons(self, controller, query):
+    def create_buttons(self, controller):
         """ 
             Creates buttons for the current page.
             
             - controller : the application
-            - query : the sqlite query statement
         """
         refresh_button = tkinter.Button(self, text='Refresh', font=controller.button_font,
                                         command=self.refresh)
         refresh_button.pack(pady=10)
 
-        create_request_button = tkinter.Button(self, text='Create a new service request', font=controller.button_font,
-                                               command=lambda: controller.show_frame('CreateRequestPage'))
-        create_request_button.pack(pady=10)
+        enter_new_equipment_button = tkinter.Button(self, text='Enter new equipment', font=controller.button_font,
+                                                    command=lambda: controller.show_frame('EnterEquipmentPage'))
+        enter_new_equipment_button.pack(pady=10)
 
-        remove_request_button = tkinter.Button(self, text='Remove a service request', font=controller.button_font,
-                                               command=lambda: controller.show_frame('RemoveRequestPage'))
-        remove_request_button.pack(pady=10)
+        delete_equipment_button = tkinter.Button(self, text='Remove equipment', font=controller.button_font,
+                                                 command=lambda: controller.show_frame('RemoveEquipmentPage'))
+        delete_equipment_button.pack(pady=10)
 
         return_button = tkinter.Button(self, text='Go to the start page', font=controller.button_font,
-                                       command=lambda: controller.show_frame('StartPage'))
-        return_button.pack(pady=10)
+                           command=lambda: controller.show_frame('StartPage'))
+        return_button.pack(pady=20)
 
     ################################ EVENT HANDLERS ###################################
 
@@ -102,5 +101,5 @@ class ServiceRequestsPage(tkinter.Frame):
         """
             A wrapper method which will just re-run a query
         """
-        query = 'SELECT MMSR_ID, Departmment, StartDate, EndDate FROM Service_Request'
+        query = 'SELECT * FROM Equipment'
         self.run_query(query)

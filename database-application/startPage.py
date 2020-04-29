@@ -2,6 +2,8 @@ import tkinter
 
 class StartPage(tkinter.Frame):
 
+    current_option = None
+
     def __init__(self, parent, controller):
         """ 
             Constructs a new page.
@@ -24,7 +26,7 @@ class StartPage(tkinter.Frame):
         """
         self.create_header(controller, 'Select a menu item to view information')
         self.create_menu(controller)
-        self.create_button(controller)
+        self.create_buttons(controller)
 
     ############################### PAGE PROPERTIES ############################### 
 
@@ -45,7 +47,8 @@ class StartPage(tkinter.Frame):
 
             - controller : the application
         """
-        application_pages = ['BaltimoreSchoolsPage', 'TowsonParticipantsPage', 'ServiceRequestsPage'] # add pages for the application here
+        application_pages = ['BaltimoreSchoolsPage', 'ServiceRequestsPage', 'TowsonParticipantsPage',
+                             'EquipmentPage', 'ComputersPage', 'PartsPage', 'AudioVisualPage'] # add pages for the application here
 
         # default to the first page in the list
         self.current_option.set(application_pages[0])
@@ -53,9 +56,9 @@ class StartPage(tkinter.Frame):
         menu_button = tkinter.OptionMenu(self, self.current_option, *application_pages)
         menu_button.pack()
 
-    def create_button(self, controller):
+    def create_buttons(self, controller):
         """ 
-            Creates a button for the current page.
+            Creates buttons for the current page.
             
             - controller : the application
         """
@@ -63,3 +66,7 @@ class StartPage(tkinter.Frame):
         change_page_button = tkinter.Button(self, text='Go to selected page', font=controller.button_font,
                                 command=lambda: controller.show_frame(self.current_option.get()))
         change_page_button.place(relx=0.5, rely=0.2, anchor='center')
+
+        logout_button = tkinter.Button(self, text='Log out', font=controller.button_font,
+                                       command=lambda: controller.show_frame('LoginPage'))
+        logout_button.place(relx=0.5, rely=0.5, anchor='center')

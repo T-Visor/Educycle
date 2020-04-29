@@ -4,6 +4,8 @@ from tkinter import ttk
 
 class TowsonParticipantsPage(tkinter.Frame):
 
+    results_table = None
+
     def __init__(self, parent, controller):
         """ 
             Constructs a new page.
@@ -14,8 +16,8 @@ class TowsonParticipantsPage(tkinter.Frame):
         tkinter.Frame.__init__(self, parent)
 
         self.controller = controller # for switching between pages
-        self.tree = ttk.Treeview(self, column=('1', '2', '3')) # table to store results from query
-        self.tree['show'] = 'headings' # eliminates the blank colum for the table view
+        self.results_table = ttk.Treeview(self, column=('1', '2', '3')) # table to store results from query
+        self.results_table['show'] = 'headings' # eliminates the blank colum for the table view
 
         self.populate_window(controller)
 
@@ -71,11 +73,11 @@ class TowsonParticipantsPage(tkinter.Frame):
 
         # fill the top row with the column names
         for index, name in enumerate(column_names, 1):
-            self.tree.heading(index, text=name)
+            self.results_table.heading(index, text=name)
 
         # fill the rest of the table values from the query
         for entry in results:
-            self.tree.insert('', tkinter.END, values=entry)
+            self.results_table.insert('', tkinter.END, values=entry)
 
-        self.tree.pack(fill='both',expand=False)
+        self.results_table.pack(fill='both',expand=False)
         connection.close()

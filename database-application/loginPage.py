@@ -15,9 +15,7 @@ class LoginPage(tkinter.Frame):
             - controller : the application
         """
         tkinter.Frame.__init__(self, parent)
-
         self.controller = controller # for switching between pages
-
         self.populate_window(controller)
 
     def populate_window(self, controller):
@@ -36,15 +34,15 @@ class LoginPage(tkinter.Frame):
             Create fields for requesting user input 
         """
         # label and field for username
-        self.username_label = tkinter.Label(self, text='username', font=('Helvetica', 14))
-        self.username_label.pack()
+        username_label = tkinter.Label(self, text='username', font=('Helvetica', 14))
+        username_label.pack()
         self.username_entry = tkinter.StringVar()
         self.username_field = tkinter.Entry(self, textvariable=self.username_entry)
         self.username_field.pack()
 
         # label and field for password
-        self.password_label = tkinter.Label(self, text='password', font=('Helvetica', 14))
-        self.password_label.pack()
+        password_label = tkinter.Label(self, text='password', font=('Helvetica', 14))
+        password_label.pack()
         self.password_entry = tkinter.StringVar()
         self.password_field = tkinter.Entry(self, textvariable=self.password_entry, show='*')
         self.password_field.pack()
