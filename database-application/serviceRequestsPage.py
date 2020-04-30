@@ -16,7 +16,7 @@ class ServiceRequestsPage(tkinter.Frame):
         tkinter.Frame.__init__(self, parent)
 
         self.controller = controller # for switching between pages
-        self.results_table = ttk.Treeview(self, column=('1', '2', '3', '4')) # table to store results from query
+        self.results_table = ttk.Treeview(self, column=('1', '2', '3', '4', '5', '6', '7', '8')) # table to store results from query
         self.results_table['show'] = 'headings' # eliminates the blank colum for the table view
 
         self.populate_window(controller)
@@ -28,7 +28,7 @@ class ServiceRequestsPage(tkinter.Frame):
             - controller : the application
         """
         # Query: Get all service requests
-        query = 'SELECT MMSR_ID, Departmment, StartDate, EndDate FROM Service_Request'
+        query = 'SELECT * FROM Service_Request'
 
         self.create_header(controller, 'Current service requests')
         self.run_query(query)
@@ -102,5 +102,5 @@ class ServiceRequestsPage(tkinter.Frame):
         """
             A wrapper method which will just re-run a query
         """
-        query = 'SELECT MMSR_ID, Departmment, StartDate, EndDate FROM Service_Request'
+        query = 'SELECT * FROM Service_Request'
         self.run_query(query)

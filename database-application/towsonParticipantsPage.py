@@ -54,9 +54,13 @@ class TowsonParticipantsPage(tkinter.Frame):
             
             - controller : the application
         """
-        button = tkinter.Button(self, text='Go to the start page', font=controller.button_font,
+        refresh_button = tkinter.Button(self, text='Refresh', font=controller.button_font,
+                                        command=lambda: self.refresh)
+        refresh_button.pack(pady=20)
+
+        return_button = tkinter.Button(self, text='Go to the start page', font=controller.button_font,
                            command=lambda: controller.show_frame('StartPage'))
-        button.pack(pady=50)
+        return_button.pack(pady=50)
 
     def run_query(self, query):
         """
@@ -81,3 +85,12 @@ class TowsonParticipantsPage(tkinter.Frame):
 
         self.results_table.pack(fill='both',expand=False)
         connection.close()
+
+    def refresh(self):
+        """
+            A wrapper method which will just re-run a query
+        """
+        query = """ SELECT Name, Sex, Age FROM Students UNION ALL
+                    SELECT Name, Sex, Age FROM Faculty_Staff
+                    ORDER BY Name """
+        self.run_query(query)
