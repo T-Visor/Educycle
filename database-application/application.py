@@ -15,6 +15,7 @@ from removeRequestPage import *
 from computersPage import *
 from audioVisualPage import *
 from partsPage import *
+from reconditionSessionsPage import *
 from tkinter import font as tkfont 
 
 class Application(tkinter.Tk):
@@ -41,7 +42,8 @@ class Application(tkinter.Tk):
                         ServiceRequestsPage, LoginPage, CreateRequestPage, 
                         EquipmentPage, EnterEquipmentPage, EnterAVPage,
                         EnterComputerPage, EnterPartPage, RemoveEquipmentPage,
-                        RemoveRequestPage, ComputersPage, AudioVisualPage, PartsPage): # add pages for the application here
+                        RemoveRequestPage, ComputersPage, AudioVisualPage, PartsPage,
+                        ReconditionSessionsPage): # add pages for the application here
             page_name = windows.__name__
             window = windows(parent=container, controller=self)
             self.pages[page_name] = window

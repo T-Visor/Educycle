@@ -48,7 +48,8 @@ class StartPage(tkinter.Frame):
             - controller : the application
         """
         application_pages = ['BaltimoreSchoolsPage','TowsonParticipantsPage', 'ServiceRequestsPage',
-                             'EquipmentPage', 'ComputersPage', 'PartsPage', 'AudioVisualPage'] # add pages for the application here
+                             'EquipmentPage', 'ComputersPage', 'PartsPage', 'AudioVisualPage',
+                             'ReconditionSessionsPage'] # add pages for the application here
 
         # default to the first page in the list
         self.current_option.set(application_pages[0])
