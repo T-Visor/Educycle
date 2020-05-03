@@ -185,7 +185,7 @@ class CreateRequestPage(tkinter.Frame):
         service_request_ID = int(service_request_ID) + 1 # increment value by 1
 
         cursor.execute("""INSERT INTO Service_Request(MMSR_ID, TU_Tag_Number, Priority_level,
-                                               Departmment, Off_Campus, Staff_overseer,
+                                               Department, Off_Campus, Staff_overseer,
                                                StartDate, EndDate) 
                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
         (service_request_ID, self.tag_number_choice.get(), self.priority_level_choice.get(),
