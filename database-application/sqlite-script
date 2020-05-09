@@ -1,0 +1,232 @@
+CREATE TABLE "Audio_Visual_Eq" (
+	"Serial_Number"	TEXT UNIQUE,
+	"Model_Number"	TEXT UNIQUE,
+	"TU_Tag_Number"	TEXT NOT NULL UNIQUE,
+	"Storage_Location"	TEXT,
+	"Office_Location"	TEXT,
+	FOREIGN KEY("Office_Location") REFERENCES "Office"("OfficeID") on Delete Cascade,
+	PRIMARY KEY("Serial_Number","Model_Number"),
+	FOREIGN KEY("TU_Tag_Number") REFERENCES "Equipment"("TU_Tag_Number") on Delete Cascade
+)
+
+CREATE TABLE "BPC" (
+	"School_Name"	TEXT NOT NULL UNIQUE,
+	"Person_of_contact"	TEXT NOT NULL UNIQUE,
+	"Address"	TEXT NOT NULL,
+	PRIMARY KEY("School_Name","Person_of_contact")
+)
+
+CREATE TABLE "Building" (
+	"BuildingID"	TEXT NOT NULL UNIQUE,
+	"Department"	TEXT NOT NULL,
+	"Address"	TEXT NOT NULL,
+	"NumberOfRoom"	INTEGER NOT NULL,
+	PRIMARY KEY("BuildingID"),
+	FOREIGN KEY("Department") REFERENCES "Department"("Department_Name")
+)
+
+CREATE TABLE "Campus_location" (
+	"Campus_ID"	TEXT NOT NULL UNIQUE,
+	"School_Abbr"	TEXT NOT NULL,
+	"Main_Office"	TEXT NOT NULL,
+	PRIMARY KEY("Campus_ID"),
+	FOREIGN KEY("School_Abbr") REFERENCES "Towson_University"("School_Abbr")
+)
+
+CREATE TABLE "Computer" (
+	"Model_Number"	TEXT UNIQUE,
+	"TU_Tag_Number"	TEXT NOT NULL UNIQUE,
+	"Computer_Type"	TEXT NOT NULL,
+	"Service_Tag_Number"	TEXT UNIQUE,
+	"Current_Location"	TEXT,
+	"Cost"	INTEGER NOT NULL,
+	"EduCycle_Computer"	TEXT NOT NULL,
+	FOREIGN KEY("Current_Location") REFERENCES "Office"("OfficeID") on Delete Cascade,
+	FOREIGN KEY("TU_Tag_Number") REFERENCES "Equipment"("TU_Tag_Number") on Delete Cascade,
+	PRIMARY KEY("Model_Number")
+)
+
+CREATE TABLE "Computer_parts" (
+	"PartsID"	TEXT NOT NULL UNIQUE,
+	"TU_Tag_Number"	TEXT NOT NULL,
+	"Parts_Type"	TEXT NOT NULL,
+	"Current_Location"	TEXT,
+	FOREIGN KEY("Current_Location") REFERENCES "Office"("OfficeID") on Delete Cascade,
+	PRIMARY KEY("PartsID"),
+	FOREIGN KEY("TU_Tag_Number") REFERENCES "Equipment"("TU_Tag_Number") on Delete Cascade
+)
+
+CREATE TABLE "Delivery_Content" (
+	"Service_Request_Number"	TEXT NOT NULL UNIQUE,
+	"Number_of_Goods"	INTEGER NOT NULL,
+	"Content"	TEXT NOT NULL,
+	"Priority_level"	TEXT,
+	"Departmment_Sent_To"	NUMERIC,
+	"Off_campus_Delivery"	TEXT,
+	"Expected_Delivery_Date"	TEXT NOT NULL,
+	"Driver"	TEXT NOT NULL,
+	PRIMARY KEY("Service_Request_Number"),
+	FOREIGN KEY("Driver") REFERENCES "Transportation"("Name"),
+	FOREIGN KEY("Off_campus_Delivery") REFERENCES "Recipient_organization"("Off_campus_Delivery"),
+	FOREIGN KEY("Departmment_Sent_To") REFERENCES "Recipient_organization"("Department_Name"),
+	FOREIGN KEY("Content") REFERENCES "Equipment"("TU_Tag_Number")
+)
+
+CREATE TABLE "Department" (
+	"Department_Name"	TEXT NOT NULL UNIQUE,
+	"Department_Code"	TEXT NOT NULL UNIQUE,
+	"Campus_ID"	INTEGER NOT NULL,
+	"Address"	TEXT NOT NULL,
+	PRIMARY KEY("Department_Name"),
+	FOREIGN KEY("Campus_ID") REFERENCES "Campus_location"("Campus_ID")
+)
+
+CREATE TABLE "EduCycle_Computers" (
+	"ComputerID"	TEXT NOT NULL UNIQUE,
+	"TU_Tag_Number"	TEXT NOT NULL,
+	"LocationID"	TEXT NOT NULL,
+	"Donated_Location"	TEXT NOT NULL,
+	PRIMARY KEY("ComputerID"),
+	FOREIGN KEY("TU_Tag_Number") REFERENCES "Equipment"("TU_Tag_Number"),
+	FOREIGN KEY("LocationID") REFERENCES "Office"("OfficeID"),
+	FOREIGN KEY("Donated_Location") REFERENCES "BPC"("School_Name")
+)
+
+CREATE TABLE "Equipment" (
+	"TU_Tag_Number"	TEXT NOT NULL UNIQUE,
+	"Manufacturer_code"	TEXT UNIQUE,
+	"Type"	TEXT NOT NULL,
+	"Storage_Location"	TEXT,
+	PRIMARY KEY("TU_Tag_Number")
+)
+
+CREATE TABLE "Faculty_Staff" (
+	"TU_ID"	TEXT NOT NULL UNIQUE,
+	"Name"	TEXT NOT NULL UNIQUE,
+	"SSN"	TEXT NOT NULL UNIQUE,
+	"School_Abbr"	TEXT NOT NULL,
+	"Sex"	TEXT NOT NULL,
+	"Age"	INTEGER NOT NULL,
+	"BuNum"	TEXT NOT NULL,
+	PRIMARY KEY("TU_ID"),
+	FOREIGN KEY("School_Abbr") REFERENCES "Towson_University"("School_Abbr"),
+	FOREIGN KEY("BuNum") REFERENCES "Building"("BuildingID")
+)
+
+CREATE TABLE "Non_College_Students" (
+	"Name"	TEXT NOT NULL UNIQUE,
+	"Age"	INTEGER NOT NULL,
+	"Parents"	TEXT,
+	"School_year"	TEXT NOT NULL,
+	"School_Name"	TEXT NOT NULL,
+	PRIMARY KEY("Name"),
+	FOREIGN KEY("School_Name") REFERENCES "BPC"("School_Name")
+)
+
+CREATE TABLE "Office" (
+	"OfficeID"	TEXT NOT NULL UNIQUE,
+	"BuildingID"	TEXT NOT NULL,
+	"RoomID"	TEXT NOT NULL,
+	"Staff_Name"	TEXT NOT NULL,
+	FOREIGN KEY("BuildingID") REFERENCES "Building"("BuildingID"),
+	PRIMARY KEY("OfficeID"),
+	FOREIGN KEY("RoomID") REFERENCES "Room"("RoomID"),
+	FOREIGN KEY("Staff_Name") REFERENCES "Faculty_Staff"("Name")
+)
+
+CREATE TABLE "Recipient_organization" (
+	"Service_Number"	INTEGER NOT NULL UNIQUE,
+	"CampusID"	TEXT,
+	"Department_Name"	TEXT,
+	"Off_campus_Delivery"	TEXT,
+	"Phone_Number"	TEXT,
+	"Name"	TEXT NOT NULL,
+	PRIMARY KEY("Service_Number"),
+	FOREIGN KEY("Off_campus_Delivery") REFERENCES "BPC"("School_Name"),
+	FOREIGN KEY("Department_Name") REFERENCES "Department"("Department_Name"),
+	FOREIGN KEY("CampusID") REFERENCES "Campus_location"("Campus_ID")
+)
+
+CREATE TABLE "Reconditioning_Building" (
+	"BuildingID"	TEXT NOT NULL UNIQUE,
+	"RoomID"	TEXT NOT NULL,
+	"Staff_on_hand"	TEXT NOT NULL,
+	PRIMARY KEY("BuildingID"),
+	FOREIGN KEY("RoomID") REFERENCES "Room"("RoomID"),
+	FOREIGN KEY("Staff_on_hand") REFERENCES "Faculty_Staff"("Name")
+)
+
+CREATE TABLE "Reconditioning_session" (
+	"SessionNum"	INTEGER NOT NULL UNIQUE,
+	"GroupNum"	INTEGER NOT NULL,
+	"BuRoomNum"	TEXT NOT NULL,
+	"Staff"	TEXT NOT NULL,
+	"Students_enrolled"	TEXT,
+	"Student_Leader"	TEXT,
+	FOREIGN KEY("Staff") REFERENCES "Faculty_Staff"("Name"),
+	FOREIGN KEY("BuRoomNum") REFERENCES "Building"("BuildingID"),
+	PRIMARY KEY("SessionNum"),
+	FOREIGN KEY("Students_enrolled") REFERENCES "Non_College_Students"("Name")
+)
+
+CREATE TABLE "Room" (
+	"BuildingID"	TEXT NOT NULL,
+	"RoomID"	TEXT NOT NULL UNIQUE,
+	"TypeOfRoom"	TEXT NOT NULL,
+	"NumberOfTech"	TEXT NOT NULL,
+	PRIMARY KEY("RoomID","BuildingID"),
+	FOREIGN KEY("BuildingID") REFERENCES "Building"("BuildingID")
+)
+
+CREATE TABLE "Service_Request" (
+	"MMSR_ID"	TEXT NOT NULL UNIQUE,
+	"TU_Tag_Number"	TEXT NOT NULL,
+	"Priority_level"	TEXT,
+	"Department"	TEXT NOT NULL,
+	"Off_Campus"	TEXT,
+	"Staff_overseer"	TEXT NOT NULL,
+	"StartDate"	TEXT NOT NULL,
+	"EndDate"	TEXT NOT NULL,
+	FOREIGN KEY("Department") REFERENCES "Department"("Department_Name"),
+	PRIMARY KEY("MMSR_ID"),
+	FOREIGN KEY("Off_Campus") REFERENCES "BPC"("School_Name"),
+	FOREIGN KEY("Staff_overseer") REFERENCES "Faculty_Staff"("Name"),
+	FOREIGN KEY("TU_Tag_Number") REFERENCES "Equipment"("TU_Tag_Number")
+)
+
+CREATE TABLE "Students" (
+	"TU_ID"	TEXT NOT NULL UNIQUE,
+	"Name"	TEXT NOT NULL UNIQUE,
+	"SSN"	TEXT NOT NULL UNIQUE,
+	"School_Abbr"	TEXT NOT NULL,
+	"Sex"	TEXT NOT NULL,
+	"Age"	TEXT NOT NULL,
+	"Major"	TEXT NOT NULL,
+	PRIMARY KEY("TU_ID"),
+	FOREIGN KEY("School_Abbr") REFERENCES "Towson_University"("School_Abbr")
+)
+
+CREATE TABLE "Towson_University" (
+	"School_Name"	TEXT NOT NULL UNIQUE,
+	"School_Abbr"	TEXT NOT NULL UNIQUE,
+	"Address"	TEXT NOT NULL UNIQUE,
+	"State"	TEXT NOT NULL,
+	"InstitutionType"	TEXT NOT NULL,
+	PRIMARY KEY("School_Name")
+)
+
+CREATE TABLE "Transportation" (
+	"Driver"	TEXT NOT NULL UNIQUE,
+	"License_Plate_Number"	TEXT NOT NULL,
+	"Type_of_car"	TEXT
+)
+
+CREATE TABLE "Volunteers" (
+	"Name"	TEXT NOT NULL UNIQUE,
+	"TU_ID"	TEXT NOT NULL,
+	PRIMARY KEY("Name"),
+	FOREIGN KEY("TU_ID") REFERENCES "Students"("TU_ID")
+)
+
+
+
